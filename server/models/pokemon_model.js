@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const dbURL = 'localhost:5432/pokemon_fed';
+const dbURL = 'postgres://localhost:5432/pokemon_fed';
 const sequelize = new Sequelize(dbURL);
 
 const Pokemon = sequelize.define('pokemons', {

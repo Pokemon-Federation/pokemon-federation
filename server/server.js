@@ -7,33 +7,46 @@ const Team = require('./models/team_model');
 
 app.listen(3000, () => console.log('servering port 3000'));
 
-Pokemon.sync().then(() => {
-  return Pokemon.create({
-    name: 'BULBASAUR',
-    type: 'GRASS',
-    hp: 50,
-    attack: 50,
-    defense: 50,
-    specialAttack: 50,
-    specialDefense: 50,
-    speed: 45,
+User.find({ where: { username: 'jared' } }).on('success', (user) => {
+  Pokemon.find({ where: { name: 'BULBASAUR' } }).on('success', (pokemon) => {
+    user.setPokemons(pokemon);
   });
 });
 
-User.sync().then(() => {
-  return User.create({
-    username: 'jared',
-    password: 'jared',
-    email: 'jared$jarde',
-    location: 'jarded',
-  });
-});
 
-Team.sync().then(() => {
-  return User.create({
-    username: 'jared',
-    password: 'jared',
-    email: 'jared$jarde',
-    location: 'jarded',
-  });
-});
+// models.User.find({ where: {first_name: 'john'} }).on('success', function(user) {
+//   models.City.find({where: {id: 10}}).on('success', function(city){
+//     user.setCities([city]);
+//   });
+// });
+
+// Pokemon.sync().then(() => {
+//   return Pokemon.create({
+//     name: 'BULBASAUR',
+//     type: 'GRASS',
+//     hp: 50,
+//     attack: 50,
+//     defense: 50,
+//     specialAttack: 50,
+//     specialDefense: 50,
+//     speed: 45,
+//   });
+// });
+//
+// User.sync().then(() => {
+//   return User.create({
+//     username: 'jared',
+//     password: 'jared',
+//     email: 'jared$jarde',
+//     location: 'jarded',
+//   });
+// });
+//
+// Team.sync().then(() => {
+//   return User.create({
+//     username: 'jared',
+//     password: 'jared',
+//     email: 'jared$jarde',
+//     location: 'jarded',
+//   });
+// });
