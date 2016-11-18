@@ -7,8 +7,9 @@ const Team = require('./models/team_model');
 
 app.listen(3000, () => console.log('servering port 3000'));
 
-User.find({ where: { username: 'jared' } }).on('success', (user) => {
-  Pokemon.find({ where: { name: 'BULBASAUR' } }).on('success', (pokemon) => {
+
+User.find({ where: { username: 'jared' } }).then((user) => {
+  Pokemon.find({ where: { name: 'BULBASAUR' } }).then((pokemon) => {
     user.setPokemons(pokemon);
   });
 });

@@ -4,7 +4,7 @@ const sequelize = new Sequelize(dbURL);
 const Pokemon = require('./pokemon_model');
 const User = require('./user_model');
 
-const Team = sequelize.define('user_pokemon', {});
+const Team = sequelize.define('userPokemon', {});
 
 Pokemon.belongsToMany(User, { through: Team });
 User.belongsToMany(Pokemon, { through: Team });
