@@ -19,7 +19,8 @@ const table = {
   sp_def: true,
   speed: true,
   name: true,
-  types: true
+  types: true,
+  hp: true
 }
 
 function createReqObject(num) {
@@ -38,7 +39,7 @@ function getTypes(arr) {
     return types;
   }, []);
 }
-const requests = createReqObject(10);
+const requests = createReqObject(151);
 
 Promise.map(requests, function (obj) {
   return request(obj).then(function (body) {
@@ -51,12 +52,27 @@ Promise.map(requests, function (obj) {
       .filter((attr) => {
         return table[attr];
       }).reduce((pokemonObj, data) => {
-         pokemonObj[data] = data !== 'types' ? pokemon[data] : 'grass';
-         return pokemonObj;
+        pokemonObj[data] = data !== 'types' ? pokemon[data] : getTypes(pokemon[data]);
+        return pokemonObj;
       }, {}));
   })
-  //write to the DB with this pokedata braj :)
-  console.log('test',pokeData);
+Pokemon.sync({force:true}).then(() => {
+  pokeData.forEach((currPokemon) => {
+    console.log('about to create entry,', currPokemon)
+    const bulb = {meow : 'BULBASAURZZZ'};
+    if (Array.isArray(currPokemon.types)) currPokemon.types = currPokemon.types.join('');
+    Pokemon.create({
+      name: currPokemon.name,
+      type: currPokemon.types,
+      hp: +currPokemon.hp,
+      attack: +currPokemon.attack,
+      defense: +currPokemon.defense,
+      specialAttack: +currPokemon.sp_atk,
+      specialDefense: +currPokemon.sp_def,
+      speed: +currPokemon.speed,
+    });
+  });
+});
 }, function (err) {
   console.log(err)
 });
