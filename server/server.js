@@ -58,8 +58,6 @@ Promise.map(requests, function (obj) {
   })
 Pokemon.sync({force:true}).then(() => {
   pokeData.forEach((currPokemon) => {
-    console.log('about to create entry,', currPokemon)
-    const bulb = {meow : 'BULBASAURZZZ'};
     if (Array.isArray(currPokemon.types)) currPokemon.types = currPokemon.types.join('');
     Pokemon.create({
       name: currPokemon.name,
