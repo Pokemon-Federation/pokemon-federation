@@ -12,46 +12,52 @@ app.use(bodyParser.json())
 app.listen(3000, () => console.log('servering port 3000'));
 
 const url = 'http://pokeapi.co/api/v1/pokemon/';
+const table = {
+  attack: true,
+  defense: true,
+  sp_atk: true,
+  sp_def: true,
+  speed: true,
+  name: true,
+  types: true
+}
 
-function createReqObject(num){
+function createReqObject(num) {
   const requests = [];
   var index = 1;
-  while(index <= num){
-    requests.push({ url: `${url+index++}`});
+  while (index <= num) {
+    requests.push({ url: `${url + index++}` });
   }
   return requests;
 }
 
-function getTypes(arr){
+function getTypes(arr) {
   if (arr.length === 1) return arr[0].name;
-  return arr.reduce((types,item) => {
+  return arr.reduce((types, item) => {
     types.push(item.name);
     return types;
-  },[]);
+  }, []);
 }
-const requests = createReqObject(151);
+const requests = createReqObject(10);
 
-Promise.map(requests,function(obj) {
-  return request(obj).then(function(body) {
+Promise.map(requests, function (obj) {
+  return request(obj).then(function (body) {
     return JSON.parse(body);
   });
-}).then(function(results) {
-  const data = [];
+}).then(function (results) {
+  const pokeData = [];
   results.forEach((pokemon) => {
-    const pokeObj = {};
-    pokeObj.name = pokemon.name;
-    pokeObj.type = getTypes(pokemon.types);
-    pokeObj.hp = pokemon.hp;
-    pokeObj.attack = pokemon.attack;
-    pokeObj.defense = pokemon.defense;
-    pokeObj.sp_atk = pokemon.sp_atk;
-    pokeObj.sp_def = pokemon.sp_def;
-    pokeObj.speed = pokemon.speed;
-    data.push(pokeObj);
+    pokeData.push(Object.keys(pokemon)
+      .filter((attr) => {
+        return table[attr];
+      }).reduce((pokemonObj, data) => {
+         pokemonObj[data] = data !== 'types' ? pokemon[data] : 'grass';
+         return pokemonObj;
+      }, {}));
   })
   //write to the DB with this pokedata braj :)
-  console.log(data);
-}, function(err) {
+  console.log('test',pokeData);
+}, function (err) {
   console.log(err)
 });
 
